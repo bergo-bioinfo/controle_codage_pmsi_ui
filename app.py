@@ -110,7 +110,7 @@ if datedeb > datefin:
 if col2.button("Recherche Consore", type="primary", disabled=disable_search):
     with col2.status("Recherche en cours...", expanded=True) as status:
         st.write("Interrogation Consore...")
-        subprocess.run([f"{sys.executable}", "/app/consore_services/controle_codage_pmsi/main.py", 
+        subprocess.run([f"{sys.executable}", "/app/consore_services/controle_codage_pmsi/main.py",
         "--consore", "consore.json", "--inputkeywords", f"/app/controle_codage_pmsi_ui/{KEYWORDS_PATH}",
         "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")])
         status.update(label="Recherche terminée", state="complete", expanded=False)
