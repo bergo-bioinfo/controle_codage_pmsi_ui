@@ -1,0 +1,6 @@
+poetry==1.6.1
+pre-commit==3.5.0
+altair<5
+streamlit==1.12.0
+streamlit-authenticator==0.2.2
+pandas==2.1.2
