@@ -15,6 +15,7 @@ import subprocess
 import sys
 import yaml
 from yaml.loader import SafeLoader
+from datetime import datetime, timedelta
 
 
 __author__ = "Yec'han Laizet"
@@ -84,7 +85,8 @@ if uploaded_file is not None:
     col1.dataframe(kw)
 
 datedeb = col2.date_input(
-    "Date de début"
+    "Date de début",
+    datetime.now() - timedelta(days=365)
 )
 
 datefin = col2.date_input(
@@ -104,11 +106,13 @@ if datedeb > datefin:
 
 # Search Consore
 if col2.button("Recherche Consore", disabled=disable_search):
-    st.write("Interrogation Consore...")
+    status_info = col2.empty()
+    status_info.info("Interrogation Consore, merci de patienter...")
     try:  # Temporary fix becasue when no results returned from Consore, process fails
         subprocess.run([f"{sys.executable}", "/app/consore-services/consore_services/controle_codage_pmsi/main.py",
             "--consore", "consore.json", "--inputkeywords", f"/app/{KEYWORDS_PATH}",
             "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")])
+        status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
                 label="Télécharger le fichier de résultats",
@@ -116,6 +120,9 @@ if col2.button("Recherche Consore", disabled=disable_search):
                 file_name=RESULT_PATH,
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
-        st.dataframe(pd.read_excel(RESULT_PATH))
-    except Exception as ex:
+        results = pd.read_excel(RESULT_PATH)
+        col2.dataframe(results)
+        st.info("Tableau de résultats avec liens")
+        st.write(results.to_html(escape=False, render_links=True), unsafe_allow_html=True)
+    except subprocess.CalledProcessError as ex:
         st.error("Erreur. Veuillez essayer avec d'autres dates (ex. 2022-01-01 & 2022-02-01) et veuillez contacter l'administrateur si l'erreur persiste!")
