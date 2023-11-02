@@ -105,9 +105,9 @@ if datedeb > datefin:
     disable_search = True
 
 # Search Consore
-sans_atcd = col2.toggle("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
-sans_negation = col2.toggle("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
-sans_hypothese = col2.toggle("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
+sans_atcd = col2.checkbox("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
+sans_negation = col2.checkbox("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
+sans_hypothese = col2.checkbox("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
 if col2.button("Recherche Consore", disabled=disable_search):
     status_info = col2.empty()
     status_info.info("Interrogation Consore, merci de patienter...")
