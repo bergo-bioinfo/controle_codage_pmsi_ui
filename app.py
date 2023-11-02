@@ -105,11 +105,10 @@ if datedeb > datefin:
     disable_search = True
 
 # Search Consore
-c1, c2, c3, c4 = col2.columns(4)
-sans_atcd = c2.toggle("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
-sans_negation = c3.toggle("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
-sans_hypothese = c4.toggle("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
-if c1.button("Recherche Consore", disabled=disable_search):
+sans_atcd = col2.toggle("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
+sans_negation = col2.toggle("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
+sans_hypothese = col2.toggle("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
+if col2.button("Recherche Consore", disabled=disable_search):
     status_info = col2.empty()
     status_info.info("Interrogation Consore, merci de patienter...")
     try:  # Temporary fix becasue when no results returned from Consore, process fails
