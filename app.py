@@ -84,22 +84,18 @@ if uploaded_file is not None:
     col1.dataframe(kw)
 
 datedeb = col2.date_input(
-    "Date de début",
-    "today",
-    format="DD/MM/YYYY"
+    "Date de début"
 )
 
 datefin = col2.date_input(
-    "Date de fin",
-    "today",
-    format="DD/MM/YYYY"
+    "Date de fin"
 )
 
 
 # Dates checks
 disable_search = False
 delta = datefin - datedeb
-if delta > 365:
+if delta.days > 365:
     col2.error("La durée entre la date de début et la dte de fin ne peut pas excéder 1 an!")
     disable_search = True
 if datedeb > datefin:
@@ -107,14 +103,13 @@ if datedeb > datefin:
     disable_search = True
 
 # Search Consore
-if col2.button("Recherche Consore", type="primary", disabled=disable_search):
-    with col2.status("Recherche en cours...", expanded=True) as status:
-        st.write("Interrogation Consore...")
-        subprocess.run([f"{sys.executable}", "/app/consore_services/controle_codage_pmsi/main.py",
-        "--consore", "consore.json", "--inputkeywords", f"/app/controle_codage_pmsi_ui/{KEYWORDS_PATH}",
-        "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")])
-        status.update(label="Recherche terminée", state="complete", expanded=False)
-        with open(KEYWORDS_PATH, "rb") as f:
+if col2.button("Recherche Consore", disabled=disable_search):
+    st.write("Interrogation Consore...")
+    try:  # Temporary fix becasue when no results returned from Consore, process fails
+        subprocess.run([f"{sys.executable}", "/app/consore-services/consore_services/controle_codage_pmsi/main.py",
+            "--consore", "consore.json", "--inputkeywords", f"/app/{KEYWORDS_PATH}",
+            "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")])
+        with open(RESULT_PATH, "rb") as f:
             col2.download_button(
                 label="Télécharger le fichier de résultats",
                 data=f,
@@ -122,3 +117,5 @@ if col2.button("Recherche Consore", type="primary", disabled=disable_search):
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
         st.dataframe(pd.read_excel(RESULT_PATH))
+    except Exception as ex:
+        st.error("Erreur. Veuillez essayer avec d'autres dates (ex. 2022-01-01 & 2022-02-01) et veuillez contacter l'administrateur si l'erreur persiste!")

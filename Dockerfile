@@ -6,20 +6,17 @@ RUN apt-get update && apt-get install -y default-libmysqlclient-dev unixodbc-dev
 
 COPY controle_codage_pmsi_ui/requirements.txt .
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN python -m pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY consore-services/ .
+COPY ./consore-services/ /app/consore-services/
 
-WORKDIR /app/consore-services/
+RUN cd /app/consore-services && pre-commit install
 
-RUN pre-commit install
-
-RUN poetry install --no-root
-
-WORKDIR /app
+RUN cd /app/consore-services && poetry export -f /app/poetry_requirements.txt
+RUN pip install --no-cache-dir -r poetry_requirements.txt
 
 COPY controle_codage_pmsi_ui/app.py .
-COPY controle_codage_pmsi_ui/mock.py .
 
 ENV PYTHONPATH "$PYTHONPATH:/app/consore-services"
 
