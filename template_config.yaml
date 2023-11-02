@@ -3,7 +3,7 @@ credentials:
     whateverusername:
       email: me@here.fr
       name: Nice Name
-      password: "very secret password hashed by streamlit stauth.Hasher(['verysecret']).generate()"
+      password: "very secret password hashed by import streamlit_authenticator as stauth ; stauth.Hasher(['verysecret']).generate()"
 cookie:
   expiry_days: 7
   key: "secret key generated for example with import secrets; secrets.token_hex(16)"
