@@ -24,6 +24,7 @@ Dans un dossier de travail `WORKDIR`:
 - Plus d'informations [ici](https://blog.streamlit.io/streamlit-authenticator-part-1-adding-an-authentication-component-to-your-app/)
 
 ### Lancer localement
+Depuis l'environnement virtuel:
 
 ```
 streamlit run app.py
@@ -46,7 +47,7 @@ docker build -f controle_codage_pmsi_ui/Dockerfile -t controle_codage_pmsi_ui .
 #### Lancer le container
 
 ```
-docker run --name controle_codage_pmsi_ui -d -v $PWD/config.yaml:/app/config.yaml -v $PWD/data/config.json:/app/data/config.json -p 8501:8501 controle_codage_pmsi_ui
+docker run --name controle_codage_pmsi_ui -d -v $(pwd)/controle_codage_pmsi_ui/config.yaml:/app/config.yaml -v $(pwd)/consore-services/creds/consore.json:/app/consore-services/creds/consore.json -p 8501:8501 controle_codage_pmsi_ui
 ```
 
 ## Utilisation de l'interface
