@@ -105,13 +105,24 @@ if datedeb > datefin:
     disable_search = True
 
 # Search Consore
-if col2.button("Recherche Consore", disabled=disable_search):
+c1, c2, c3, c4 = col2.columns(4)
+sans_atcd = c2.toggle("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
+sans_negation = c3.toggle("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
+sans_hypothese = c4.toggle("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
+if c1.button("Recherche Consore", disabled=disable_search):
     status_info = col2.empty()
     status_info.info("Interrogation Consore, merci de patienter...")
     try:  # Temporary fix becasue when no results returned from Consore, process fails
-        subprocess.run([f"{sys.executable}", "/app/consore-services/consore_services/controle_codage_pmsi/main.py",
+        cmds = [f"{sys.executable}", "/app/consore-services/consore_services/controle_codage_pmsi/main.py",
             "--consore", "consore.json", "--inputkeywords", f"/app/{KEYWORDS_PATH}",
-            "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")])
+            "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")]
+        if sans_atcd:
+            cmds.append("--SANS_ATCD true")
+        if sans_negation:
+            cmds.append("--SANS_NEGATION true")
+        if sans_hypothese:
+            cmds.append("--SANS_HYPOTHESE true")
+        subprocess.run(cmds)
         status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
