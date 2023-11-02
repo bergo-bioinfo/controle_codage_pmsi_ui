@@ -23,6 +23,22 @@ Dans un dossier de travail `WORKDIR`:
 - Modifier à minima les `usernames` et la `key`
 - Plus d'informations [ici](https://blog.streamlit.io/streamlit-authenticator-part-1-adding-an-authentication-component-to-your-app/)
 
+**Notes**
+
+- les mots de passe doivent être codés comme suit:
+
+```python
+import streamlit_authenticator as stauth
+stauth.Hasher(['mysecretpassword']).generate()
+```
+
+- la `key` peut être générée par:
+
+```python
+import secrets
+secrets.token_hex(16)
+```
+
 ### Lancer localement
 Depuis l'environnement virtuel:
 
