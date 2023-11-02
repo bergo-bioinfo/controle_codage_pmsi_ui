@@ -116,11 +116,11 @@ if col2.button("Recherche Consore", disabled=disable_search):
             "--consore", "consore.json", "--inputkeywords", f"/app/{KEYWORDS_PATH}",
             "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")]
         if sans_atcd:
-            cmds.append("--SANS_ATCD true")
+            cmds += ["--SANS_ATCD", "true"]
         if sans_negation:
-            cmds.append("--SANS_NEGATION true")
+            cmds += ["--SANS_NEGATION", "true"]
         if sans_hypothese:
-            cmds.append("--SANS_HYPOTHESE true")
+            cmds += ["--SANS_HYPOTHESE", "true"]
         subprocess.run(cmds)
         status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
