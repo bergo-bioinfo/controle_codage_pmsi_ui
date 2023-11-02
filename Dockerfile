@@ -13,7 +13,7 @@ COPY ./consore-services/ /app/consore-services/
 
 RUN cd /app/consore-services && pre-commit install
 
-RUN cd /app/consore-services && poetry export -f /app/poetry_requirements.txt
+RUN cd /app/consore-services && poetry export -o /app/poetry_requirements.txt
 RUN pip install --no-cache-dir -r poetry_requirements.txt
 
 COPY controle_codage_pmsi_ui/app.py .
