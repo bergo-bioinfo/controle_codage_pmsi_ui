@@ -113,22 +113,27 @@ if c1.button("Recherche Consore", disabled=disable_search):
     status_info = col2.empty()
     status_info.info("Interrogation Consore, merci de patienter...")
     try:  # Temporary fix becasue when no results returned from Consore, process fails
+        now = datetime.now().strftime("%Y-%m-%d")
+        result_fname = f'{now}_Consore_PMSI_{datedeb.strftime("%Y-%m-%d")}_{datefin.strftime("%Y-%m-%d")}'
         cmds = [f"{sys.executable}", "/app/consore-services/consore_services/controle_codage_pmsi/main.py",
             "--consore", "consore.json", "--inputkeywords", f"/app/{KEYWORDS_PATH}",
             "--datedeb", datedeb.strftime("%Y-%m-%d"), "--datefin", datefin.strftime("%Y-%m-%d")]
         if sans_atcd:
             cmds += ["--SANS_ATCD", "true"]
+            result_fname += "_SANS_ATCD"
         if sans_negation:
             cmds += ["--SANS_NEGATION", "true"]
+            result_fname += "_SANS_NEGATION"
         if sans_hypothese:
             cmds += ["--SANS_HYPOTHESE", "true"]
+            result_fname += "_SANS_HYPOTHESE"
         subprocess.run(cmds)
         status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
                 label="Télécharger le fichier de résultats xlsx",
                 data=f,
-                file_name=RESULT_PATH,
+                file_name=f"{result_fname}.xlsx",
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
         results = pd.read_excel(RESULT_PATH)
