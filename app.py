@@ -129,7 +129,7 @@ if c1.button("Recherche Consore", disabled=disable_search):
         if sans_hypothese:
             cmds += ["--SANS_HYPOTHESE", "true"]
             result_fname += "_SANS_HYPOTHESE"
-        subprocess.run(cmds)
+        subprocess.check_output(cmds)
         status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
@@ -146,4 +146,4 @@ if c1.button("Recherche Consore", disabled=disable_search):
             "consore_link": st.column_config.LinkColumn("consore_link")
         })
     except subprocess.CalledProcessError as ex:
-        st.error("Erreur. Veuillez essayer avec d'autres dates (ex. 2022-01-01 & 2022-02-01) et veuillez contacter l'administrateur si l'erreur persiste!")
+        st.error("Erreur. A priori, aucun résultat n'a été retrouvé. Veuillez essayer avec d'autres paramètres ou dates (ex. 2022-01-01 & 2022-02-01). Si l'erreur persiste, veuillez contacter l'administrateur!")
