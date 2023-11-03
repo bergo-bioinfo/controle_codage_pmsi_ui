@@ -1,4 +1,4 @@
-FROM python:3.9.7
+FROM python:3.11.4-bullseye
 
 WORKDIR /app
 
@@ -13,12 +13,11 @@ COPY ./consore-services/ /app/consore-services/
 
 RUN cd /app/consore-services && pre-commit install
 
-RUN cd /app/consore-services && poetry export -o /app/poetry_requirements.txt
-RUN pip install --no-cache-dir -r poetry_requirements.txt
+RUN cd /app/consore-services \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-root
 
 COPY controle_codage_pmsi_ui/app.py .
-
-ENV PYTHONPATH "$PYTHONPATH:/app/consore-services"
 
 EXPOSE 8501
 
