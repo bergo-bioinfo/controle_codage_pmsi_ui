@@ -86,11 +86,13 @@ if uploaded_file is not None:
 
 datedeb = col2.date_input(
     "Date de début",
-    datetime.now() - timedelta(days=365)
+    datetime.now() - timedelta(days=365),
+    format="DD/MM/YYYY"
 )
 
 datefin = col2.date_input(
-    "Date de fin"
+    "Date de fin",
+    format="DD/MM/YYYY"
 )
 
 
@@ -138,6 +140,10 @@ if c1.button("Recherche Consore", disabled=disable_search):
             )
         results = pd.read_excel(RESULT_PATH)
         st.info("Tableau de résultats avec liens cliquables")
-        st.dataframe(results, column_config={"consore_link": st.column_config.LinkColumn("consore_link")})
+        st.dataframe(results, column_config={
+            "patient_ipp_x": st.column_config.NumberColumn(format="%i"),
+            "code_visite": st.column_config.NumberColumn(format="%i"),
+            "consore_link": st.column_config.LinkColumn("consore_link")
+        })
     except subprocess.CalledProcessError as ex:
         st.error("Erreur. Veuillez essayer avec d'autres dates (ex. 2022-01-01 & 2022-02-01) et veuillez contacter l'administrateur si l'erreur persiste!")
