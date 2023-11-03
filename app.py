@@ -146,4 +146,4 @@ if c1.button("Recherche Consore", disabled=disable_search):
             "consore_link": st.column_config.LinkColumn("consore_link")
         })
     except subprocess.CalledProcessError as ex:
-        st.error("Erreur. A priori, aucun résultat n'a été retrouvé. Veuillez essayer avec d'autres paramètres ou dates (ex. 2022-01-01 & 2022-02-01). Si l'erreur persiste, veuillez contacter l'administrateur!")
+        status_info.error("Erreur. A priori, aucun résultat n'a été retrouvé. Veuillez essayer avec d'autres paramètres ou dates (ex. 2022-01-01 & 2022-02-01). Si l'erreur persiste, veuillez contacter l'administrateur!")
