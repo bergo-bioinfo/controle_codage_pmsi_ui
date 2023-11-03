@@ -105,10 +105,11 @@ if datedeb > datefin:
     disable_search = True
 
 # Search Consore
-sans_atcd = col2.checkbox("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
-sans_negation = col2.checkbox("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
-sans_hypothese = col2.checkbox("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
-if col2.button("Recherche Consore", disabled=disable_search):
+c1, c2, c3, c4 = col2.columns(4)
+sans_atcd = c2.toggle("SANS_ATCD", help="Activer pour ne pas chercher dans les antécédants")
+sans_negation = c3.toggle("SANS_NEGATION", help="Activer pour ne pas chercher dans les négations")
+sans_hypothese = c4.toggle("SANS_HYPOTHESE", help="Activer pour ne pas chercher dans les hypothèses")
+if c1.button("Recherche Consore", disabled=disable_search):
     status_info = col2.empty()
     status_info.info("Interrogation Consore, merci de patienter...")
     try:  # Temporary fix becasue when no results returned from Consore, process fails
@@ -125,14 +126,13 @@ if col2.button("Recherche Consore", disabled=disable_search):
         status_info.info("Terminé!")
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
-                label="Télécharger le fichier de résultats",
+                label="Télécharger le fichier de résultats xlsx",
                 data=f,
                 file_name=RESULT_PATH,
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
         results = pd.read_excel(RESULT_PATH)
-        col2.dataframe(results)
-        st.info("Tableau de résultats avec liens")
-        st.write(results.to_html(escape=False, render_links=True), unsafe_allow_html=True)
+        st.info("Tableau de résultats avec liens cliquables")
+        st.dataframe(results, column_config={"consore_link": st.column_config.LinkColumn("consore_link")})
     except subprocess.CalledProcessError as ex:
         st.error("Erreur. Veuillez essayer avec d'autres dates (ex. 2022-01-01 & 2022-02-01) et veuillez contacter l'administrateur si l'erreur persiste!")
