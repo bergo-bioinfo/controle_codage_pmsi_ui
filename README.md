@@ -48,6 +48,19 @@ streamlit run app.py
 
 Visualiser l'interface à l'url http://localhost:8501
 
+#### HTTPS (SSL)
+
+Pour activer le https, indiquer les chemins de vos fichiers `cert` et `key` dans un fichier config.toml
+
+```
+[server]
+
+sslCertFile = "/path/to/cert.pem"
+sslKeyFile = "/path/to/key.pem"
+```
+
+Placer ce fichier soit dans le dossier dans lequel vous lancez l'application, soit dans `~/.streamlit/config.toml
+
 ### Lancer via Docker
 
 #### Compiler l'image
@@ -65,6 +78,24 @@ docker build -f controle_codage_pmsi_ui/Dockerfile -t controle_codage_pmsi_ui .
 ```
 docker run --name controle_codage_pmsi_ui -d -v $(pwd)/controle_codage_pmsi_ui/config.yaml:/app/config.yaml -v $(pwd)/consore-services/creds/consore.json:/app/consore-services/creds/consore.json -p 8501:8501 controle_codage_pmsi_ui
 ```
+
+#### HTTPS (SSL)
+
+Pour activer le https, créer un fichier config.toml
+
+```
+[server]
+
+sslCertFile = "/app/cert.pem"
+sslKeyFile = "/app/key.pem"
+```
+
+Monter ces deux fichiers dans le dossier `/app` du container:
+
+```
+docker run --name controle_codage_pmsi_ui -d -v /path/to/key.pem:/app/key.pem -v /path/to/cert.pem:/app/cert.pem -v /data/dockerbuilds/consore/config.toml:/app/.streamlit/config.toml -v $(pwd)/controle_codage_pmsi_ui/config.yaml:/app/config.yaml -v $(pwd)/consore-services/creds/consore.json:/app/consore-services/creds/consore.json -p 8501:8501 controle_codage_pmsi_ui
+```
+
 
 ## Utilisation de l'interface
 
