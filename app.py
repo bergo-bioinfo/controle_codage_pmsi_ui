@@ -139,7 +139,7 @@ if c1.button("Recherche Consore", type="primary", disabled=disable_search):
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
         results = pd.read_excel(RESULT_PATH)
-        st.info("Tableau de résultats avec liens cliquables")
+        st.info(f"Tableau de résultats ({results.shape[0]}) avec liens cliquables")
         st.dataframe(results, column_config={
             "patient_ipp_x": st.column_config.NumberColumn(format="%i"),
             "code_visite": st.column_config.NumberColumn(format="%i"),
