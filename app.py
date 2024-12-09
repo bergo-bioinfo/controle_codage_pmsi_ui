@@ -135,7 +135,7 @@ if c1.button("Recherche Consore", type="primary", disabled=disable_search):
         # Fix acronym AIT processed as french verb
         # Add column to filter absence of "AIT" string
         results = pd.read_excel(RESULT_PATH)
-        results['contains_AIT'] = (results['sentence'].str.contains('AIT')) & (results['keyword'] == 'AIT')
+        results['false_positive_AIT'] = (~results['sentence'].str.contains('AIT', na=False)) & (results['keyword'] == 'AIT')
         results.to_excel(RESULT_PATH)
 
         with open(RESULT_PATH, "rb") as f:
