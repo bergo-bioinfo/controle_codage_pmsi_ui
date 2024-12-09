@@ -131,6 +131,13 @@ if c1.button("Recherche Consore", type="primary", disabled=disable_search):
             result_fname += "_SANS_HYPOTHESE"
         subprocess.check_output(cmds)
         status_info.info("Terminé!")
+
+        # Fix acronym AIT processed as french verb
+        # Add column to filter absence of "AIT" string
+        results = pd.read_excel(RESULT_PATH)
+        results['contains_AIT'] = (results['sentence'].str.contains('AIT')) & (results['keyword'] == 'AIT')
+        results.to_excel(RESULT_PATH)
+
         with open(RESULT_PATH, "rb") as f:
             col2.download_button(
                 label="Télécharger le fichier de résultats xlsx",
@@ -138,7 +145,6 @@ if c1.button("Recherche Consore", type="primary", disabled=disable_search):
                 file_name=f"{result_fname}.xlsx",
                 mime='application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet',
             )
-        results = pd.read_excel(RESULT_PATH)
         st.info(f"Tableau de résultats ({results.shape[0]}) avec liens cliquables")
         st.dataframe(results, column_config={
             "patient_ipp_x": st.column_config.NumberColumn(format="%i"),
